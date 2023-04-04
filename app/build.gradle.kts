@@ -84,8 +84,10 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.0.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore:1.0.0")
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.44.2")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+
     implementation("com.google.protobuf:protobuf-kotlin-lite:3.21.12")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0-RC")
@@ -100,6 +102,15 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.3")
     debugImplementation("androidx.compose.ui:ui-tooling:1.3.3")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.3.3")
+
+    testImplementation("com.google.dagger:hilt-android-testing:2.44.2")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.44.2")
+
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.android)
+    testImplementation ("org.robolectric:robolectric:4.5.1")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+
 }
 
 kapt {
