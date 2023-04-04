@@ -1,16 +1,35 @@
 package jp.speakbuddy.edisonandroidexercise.ui.fact
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import jp.speakbuddy.edisonandroidexercise.network.FactServiceProvider
-import kotlinx.coroutines.runBlocking
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.speakbuddy.edisonandroidexercise.data.FactRepository
+import jp.speakbuddy.edisonandroidexercise.network.FactResponse
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FactViewModel : ViewModel() {
-    fun updateFact(completion: () -> Unit): String =
-        runBlocking {
-            try {
-                FactServiceProvider.provide().getFact().fact
-            } catch (e: Throwable) {
-                "something went wrong. error = ${e.message}"
-            }.also { completion() }
+
+@HiltViewModel
+class FactViewModel @Inject constructor(private val factRepository: FactRepository) : ViewModel() {
+    var response by mutableStateOf(FactResponse("", 0))
+        private set
+
+    init {
+        viewModelScope.launch {
+            factRepository.getFacts().collect { factResponse ->
+                response = factResponse
+            }
         }
+    }
+
+
+     fun updateFact() {
+        viewModelScope.launch {
+            factRepository.loadFacts()
+        }
+     }
+
 }
